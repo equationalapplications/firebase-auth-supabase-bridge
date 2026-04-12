@@ -1,4 +1,4 @@
-# firebase-auth-supabase-bridge
+# @equationalapplications/firebase-auth-supabase-bridge
 
 Exchange a Firebase Auth token for a real Supabase session — no Supabase SSO add-on required.
 
@@ -38,13 +38,13 @@ Firebase token (decoded)
 ## Installation
 
 ```bash
-npm install firebase-auth-supabase-bridge @supabase/supabase-js
+npm install @equationalapplications/firebase-auth-supabase-bridge @supabase/supabase-js
 ```
 
 ## Usage
 
 ```ts
-import { exchangeFirebaseTokenForSupabaseSession, AuthBridgeError } from "firebase-auth-supabase-bridge";
+import { exchangeFirebaseTokenForSupabaseSession, AuthBridgeError } from "@equationalapplications/firebase-auth-supabase-bridge";
 import { onCall, HttpsError } from "firebase-functions/v2/https";
 
 export const exchangeToken = onCall(
@@ -169,6 +169,55 @@ class AuthBridgeError extends Error {
   readonly code: AuthBridgeErrorCode;
 }
 ```
+
+## Contributing
+
+### Conventional Commits & automated releases
+
+This repository uses [semantic-release](https://semantic-release.gitbook.io/) to publish to npm
+automatically when commits land on `main`. A new npm version is only created when at least one
+commit since the last release follows the
+[Conventional Commits](https://www.conventionalcommits.org/) format. Plain commit messages are
+ignored by the release pipeline.
+
+#### Commit message format
+
+```
+<type>(<optional scope>): <short summary>
+
+[optional body]
+
+[optional footer(s)]
+```
+
+#### Types and their effect on the version number
+
+| Type | When to use | Version bump |
+|------|-------------|--------------|
+| `feat` | A new user-facing feature | **minor** (1.x.0) |
+| `fix` | A bug fix | **patch** (1.0.x) |
+| `perf` | A performance improvement | **patch** |
+| `refactor` | Code restructuring, no behaviour change | none |
+| `docs` | Documentation only | none |
+| `chore` | Tooling / dependency updates | none |
+| `test` | Adding or fixing tests | none |
+| `ci` | CI/CD changes | none |
+| `BREAKING CHANGE` | Footer or `!` after type, e.g. `feat!:` | **major** (x.0.0) |
+
+#### Examples
+
+```
+feat: add refresh-token rotation support
+fix: handle deleted Supabase users correctly
+feat!: rename exchangeToken option supabaseUrl to projectUrl
+
+BREAKING CHANGE: the `supabaseUrl` option has been renamed to `projectUrl`
+```
+
+#### Triggering the first release
+
+If no qualifying commit exists yet, push any `feat:` or `fix:` commit to `main` and the CI
+release job will publish version `1.0.0` to npm automatically.
 
 ## License
 
