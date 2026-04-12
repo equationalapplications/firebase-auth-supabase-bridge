@@ -21,6 +21,12 @@ export async function exchangeFirebaseTokenForSupabaseSession(
 ): Promise<SupabaseSession> {
   const { supabaseUrl, supabaseServiceRoleKey, firebaseUid, email, onUserReady } = options;
 
+  if (!supabaseUrl) {
+    throw new AuthBridgeError("failed-precondition", "supabaseUrl is required.");
+  }
+  if (!supabaseServiceRoleKey) {
+    throw new AuthBridgeError("failed-precondition", "supabaseServiceRoleKey is required.");
+  }
   if (!email) {
     throw new AuthBridgeError("failed-precondition", "Email is required.");
   }
