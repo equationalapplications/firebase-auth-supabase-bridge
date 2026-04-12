@@ -170,6 +170,26 @@ class AuthBridgeError extends Error {
 }
 ```
 
+## Migrating from v1.x to v2.x
+
+The package was renamed from `firebase-auth-supabase-bridge` to
+`@equationalapplications/firebase-auth-supabase-bridge`. Update your project:
+
+```bash
+npm uninstall firebase-auth-supabase-bridge
+npm install @equationalapplications/firebase-auth-supabase-bridge
+```
+
+Update your imports:
+
+```ts
+// before
+import { exchangeFirebaseTokenForSupabaseSession, AuthBridgeError } from "firebase-auth-supabase-bridge";
+
+// after
+import { exchangeFirebaseTokenForSupabaseSession, AuthBridgeError } from "@equationalapplications/firebase-auth-supabase-bridge";
+```
+
 ## Contributing
 
 ### Conventional Commits & automated releases
