@@ -1,6 +1,6 @@
 {
   "name": "@equationalapplications/firebase-auth-supabase-bridge",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Exchange a decoded Firebase token for a real Supabase session without the Supabase SSO add-on",
   "type": "module",
   "main": "dist/index.cjs",

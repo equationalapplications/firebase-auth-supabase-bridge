@@ -1,3 +1,18 @@
+# [2.0.0](https://github.com/equationalapplications/firebase-auth-supabase-bridge/compare/v1.0.0...v2.0.0) (2026-04-12)
+
+
+* feat!: rename npm package to @equationalapplications/firebase-auth-supabase-bridge ([86a2013](https://github.com/equationalapplications/firebase-auth-supabase-bridge/commit/86a2013b5f84980f3bb735d6e95b2e2e55067cbd))
+
+
+### BREAKING CHANGES
+
+* Package has been renamed from `firebase-auth-supabase-bridge`
+to `@equationalapplications/firebase-auth-supabase-bridge`. Update your
+package.json dependency and all import statements. See the README migration
+guide for details.
+
+Co-authored-by: equationalapplications <65428263+equationalapplications@users.noreply.github.com>
+
 # 1.0.0 (2026-04-12)
 
 
