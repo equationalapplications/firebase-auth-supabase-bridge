@@ -37,6 +37,10 @@
   "engines": {
     "node": ">=22.14"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/equationalapplications/firebase-auth-supabase-bridge.git"
+  },
   "license": "MIT",
   "publishConfig": {
     "access": "public"
