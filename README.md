@@ -1,5 +1,8 @@
 # @equationalapplications/firebase-auth-supabase-bridge
 
+[![npm version](https://img.shields.io/npm/v/@equationalapplications/firebase-auth-supabase-bridge.svg?label=npm)](https://www.npmjs.com/package/@equationalapplications/firebase-auth-supabase-bridge)
+[![GitHub release](https://img.shields.io/github/v/release/equationalapplications/firebase-auth-supabase-bridge.svg)](https://github.com/equationalapplications/firebase-auth-supabase-bridge/releases/latest)
+
 Exchange a Firebase Auth token for a real Supabase session — no Supabase SSO add-on required.
 
 ## Why this package?
@@ -170,6 +173,26 @@ class AuthBridgeError extends Error {
 }
 ```
 
+## Migrating from v1.x to v2.x
+
+The package was renamed from `firebase-auth-supabase-bridge` to
+`@equationalapplications/firebase-auth-supabase-bridge`. Update your project:
+
+```bash
+npm uninstall firebase-auth-supabase-bridge
+npm install @equationalapplications/firebase-auth-supabase-bridge
+```
+
+Update your imports:
+
+```ts
+// before
+import { exchangeFirebaseTokenForSupabaseSession, AuthBridgeError } from "firebase-auth-supabase-bridge";
+
+// after
+import { exchangeFirebaseTokenForSupabaseSession, AuthBridgeError } from "@equationalapplications/firebase-auth-supabase-bridge";
+```
+
 ## Contributing
 
 ### Conventional Commits & automated releases
@@ -222,4 +245,8 @@ release job will publish version `1.0.0` to npm automatically.
 ## License
 
 MIT
+
+---
+
+Made with ❤️ by [Equational Applications LLC](https://equationalapplications.com)
 
