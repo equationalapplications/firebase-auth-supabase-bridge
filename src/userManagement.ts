@@ -8,7 +8,7 @@ export async function findSupabaseUserByEmail(
   const { data, error } = await supabase.rpc("get_user_id_by_email", {
     lookup_email: email.toLowerCase(),
   });
-  if (error) throw new AuthBridgeError("internal", "Failed to look up user by email.");
+  if (error) throw new AuthBridgeError("internal", `Failed to look up user by email: ${error.message}`);
   if (typeof data === "string" && data.length > 0) return { id: data };
   return null;
 }
@@ -20,7 +20,7 @@ export async function findSupabaseUserByEmailIncludeDeleted(
   const { data, error } = await supabase.rpc("get_auth_user_by_email", {
     lookup_email: email.toLowerCase(),
   });
-  if (error) throw new AuthBridgeError("internal", "Failed to look up user by email.");
+  if (error) throw new AuthBridgeError("internal", `Failed to look up user by email: ${error.message}`);
   if (data && typeof data === "object" && !Array.isArray(data)) {
     const record = data as Record<string, unknown>;
     const id = record["user_id"];

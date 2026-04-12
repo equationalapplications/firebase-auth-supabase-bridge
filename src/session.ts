@@ -18,7 +18,10 @@ export async function getSupabaseUserSession(
   });
 
   if (linkError || !linkData?.properties?.hashed_token) {
-    throw new AuthBridgeError("internal", "Failed to generate Supabase session link.");
+    throw new AuthBridgeError(
+      "internal",
+      `Failed to generate Supabase session link${linkError ? `: ${linkError.message}` : ""}.`,
+    );
   }
 
   const { data: sessionData, error: verifyError } = await supabase.auth.verifyOtp({
@@ -27,7 +30,10 @@ export async function getSupabaseUserSession(
   });
 
   if (verifyError || !sessionData?.session) {
-    throw new AuthBridgeError("internal", "Failed to verify Supabase session token.");
+    throw new AuthBridgeError(
+      "internal",
+      `Failed to verify Supabase session token${verifyError ? `: ${verifyError.message}` : ""}.`,
+    );
   }
 
   const s = sessionData.session;
