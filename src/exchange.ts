@@ -43,7 +43,11 @@ export async function exchangeFirebaseTokenForSupabaseSession(
     if (created) {
       supabaseUserId = created.id;
       if (onUserReady) {
-        await onUserReady(supabaseUserId);
+        try {
+          await onUserReady(supabaseUserId);
+        } catch (err) {
+          console.error("onUserReady threw an error (session will still be returned):", err);
+        }
       }
     }
   }
@@ -52,5 +56,5 @@ export async function exchangeFirebaseTokenForSupabaseSession(
     throw new AuthBridgeError("internal", "Failed to find or create Supabase user.");
   }
 
-  return getSupabaseUserSession(supabase, email);
+  return getSupabaseUserSession(supabaseUrl, supabaseServiceRoleKey, email);
 }

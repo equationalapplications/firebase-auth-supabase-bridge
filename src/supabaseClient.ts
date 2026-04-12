@@ -4,7 +4,7 @@ import { AuthBridgeError } from "./errors.js";
 const clients = new Map<string, SupabaseClient>();
 
 export function getSupabaseAdminClient(supabaseUrl: string, serviceRoleKey: string): SupabaseClient {
-  const key = `${supabaseUrl}::${serviceRoleKey}`;
+  const key = supabaseUrl;
   const existing = clients.get(key);
   if (existing) return existing;
 

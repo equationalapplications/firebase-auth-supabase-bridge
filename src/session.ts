@@ -1,4 +1,4 @@
-import type { SupabaseClient } from "@supabase/supabase-js";
+import { createClient } from "@supabase/supabase-js";
 import { AuthBridgeError } from "./errors.js";
 
 export interface SupabaseSession {
@@ -9,9 +9,13 @@ export interface SupabaseSession {
 }
 
 export async function getSupabaseUserSession(
-  supabase: SupabaseClient,
+  supabaseUrl: string,
+  serviceRoleKey: string,
   email: string
 ): Promise<SupabaseSession> {
+  const supabase = createClient(supabaseUrl, serviceRoleKey, {
+    auth: { autoRefreshToken: false, persistSession: false },
+  });
   const { data: linkData, error: linkError } = await supabase.auth.admin.generateLink({
     type: "magiclink",
     email: email.toLowerCase(),

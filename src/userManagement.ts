@@ -50,17 +50,22 @@ export async function createSupabaseUser(
       if (!existing.deletedAt) return { id: existing.id };
 
       const { error: deleteError } = await supabase.auth.admin.deleteUser(existing.id, false);
-      if (deleteError && deleteError.status !== 404) return null;
+      if (deleteError && deleteError.status !== 404) {
+        throw new AuthBridgeError("internal", `Failed to delete soft-deleted Supabase user: ${deleteError.message}`);
+      }
 
       const { data: recreated, error: recreateError } = await supabase.auth.admin.createUser({
         email,
         email_confirm: true,
         user_metadata: { firebaseUid },
       });
-      if (recreateError || !recreated?.user) return null;
+      if (recreateError) {
+        throw new AuthBridgeError("internal", `Failed to recreate Supabase user: ${recreateError.message}`);
+      }
+      if (!recreated?.user) return null;
       return { id: recreated.user.id };
     }
-    return null;
+    throw new AuthBridgeError("internal", `Failed to create Supabase user: ${error.message}`);
   }
 
   if (!data?.user) return null;
