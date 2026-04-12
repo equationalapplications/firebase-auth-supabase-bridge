@@ -1,3 +1,10 @@
+## [2.0.1](https://github.com/equationalapplications/firebase-auth-supabase-bridge/compare/v2.0.0...v2.0.1) (2026-04-12)
+
+
+### Bug Fixes
+
+* add input validation for supabaseUrl and supabaseServiceRoleKey ([7374a6d](https://github.com/equationalapplications/firebase-auth-supabase-bridge/commit/7374a6d929b84f3176f37c415dae61da55159817))
+
 # [2.0.0](https://github.com/equationalapplications/firebase-auth-supabase-bridge/compare/v1.0.0...v2.0.0) (2026-04-12)
 
 
