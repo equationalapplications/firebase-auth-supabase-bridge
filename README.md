@@ -202,7 +202,7 @@ ignored by the release pipeline.
 | `chore` | Tooling / dependency updates | none |
 | `test` | Adding or fixing tests | none |
 | `ci` | CI/CD changes | none |
-| `BREAKING CHANGE` | Footer or `!` after type, e.g. `feat!:` | **major** (x.0.0) |
+| breaking changes | Indicate with `!` after a valid type, e.g. `feat!:` / `fix!:`, and/or with a `BREAKING CHANGE:` footer | **major** (x.0.0) |
 
 #### Examples
 
