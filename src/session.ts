@@ -28,6 +28,9 @@ export async function getSupabaseUserSession(
     });
     resolvedEmail = email;
   } else {
+    if (urlOrClient == null) {
+      throw new AuthBridgeError("failed-precondition", "client must be provided.");
+    }
     supabase = urlOrClient;
     resolvedEmail = keyOrEmail;
   }
