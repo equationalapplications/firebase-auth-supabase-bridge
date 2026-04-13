@@ -252,7 +252,8 @@ test("soft-delete recreate: throws when 422 user cannot be found by email lookup
   );
 });
 
-test("soft-delete recreate: throws when deleteUser fails with non-404 error", async () => {  const staleId = "00000000-0000-0000-0000-000000000009";
+test("soft-delete recreate: throws when deleteUser fails with non-404 error", async () => {
+  const staleId = "00000000-0000-0000-0000-000000000009";
   globalThis.fetch = sequentialFetch(
     jsonResponse(null),                                                                               // get_user_id_by_email → not found
     jsonResponse({ msg: "User already registered" }, 422),                                           // createUser → 422
