@@ -46,7 +46,9 @@ export async function createSupabaseUser(
   if (error) {
     if (error.status === 422) {
       const existing = await findSupabaseUserByEmailIncludeDeleted(supabase, email);
-      if (!existing) return null;
+      if (!existing) {
+        throw new AuthBridgeError("internal", "Supabase reported email already registered but user could not be found by email lookup");
+      }
       if (!existing.deletedAt) return { id: existing.id };
 
       const { error: deleteError } = await supabase.auth.admin.deleteUser(existing.id, false);

@@ -228,8 +228,31 @@ test("returns session even when onUserReady throws", async () => {
   assert.equal(result.refresh_token, "refresh-token-123");
 });
 
-test("soft-delete recreate: throws when deleteUser fails with non-404 error", async () => {
-  const staleId = "00000000-0000-0000-0000-000000000009";
+test("soft-delete recreate: throws when 422 user cannot be found by email lookup", async () => {
+  globalThis.fetch = sequentialFetch(
+    jsonResponse(null),                                                                               // get_user_id_by_email → not found
+    jsonResponse({ msg: "User already registered" }, 422),                                           // createUser → 422
+    jsonResponse(null),                                                                               // get_auth_user_by_email → not found (unexpected)
+  );
+
+  await assert.rejects(
+    () =>
+      exchangeFirebaseTokenForSupabaseSession({
+        supabaseUrl: "https://test11.supabase.co",
+        supabaseServiceRoleKey: SERVICE_ROLE_KEY,
+        firebaseUid: "firebase-uid-123",
+        email: "user@example.com",
+      }),
+    (err: unknown) => {
+      assert(err instanceof AuthBridgeError, "expected AuthBridgeError");
+      assert.equal(err.code, "internal");
+      assert.match(err.message, /already registered but user could not be found/);
+      return true;
+    },
+  );
+});
+
+test("soft-delete recreate: throws when deleteUser fails with non-404 error", async () => {  const staleId = "00000000-0000-0000-0000-000000000009";
   globalThis.fetch = sequentialFetch(
     jsonResponse(null),                                                                               // get_user_id_by_email → not found
     jsonResponse({ msg: "User already registered" }, 422),                                           // createUser → 422
