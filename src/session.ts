@@ -1,4 +1,4 @@
-import type { SupabaseClient } from "@supabase/supabase-js";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { AuthBridgeError } from "./errors.js";
 
 export interface SupabaseSession {
@@ -8,13 +8,40 @@ export interface SupabaseSession {
   token_type: string;
 }
 
+export async function getSupabaseUserSession(supabaseUrl: string, serviceRoleKey: string, email: string): Promise<SupabaseSession>;
+/** @deprecated Pass supabaseUrl and serviceRoleKey instead of a SupabaseClient instance. */
+export async function getSupabaseUserSession(client: SupabaseClient, email: string): Promise<SupabaseSession>;
 export async function getSupabaseUserSession(
-  supabase: SupabaseClient,
-  email: string
+  urlOrClient: string | SupabaseClient,
+  keyOrEmail: string,
+  email?: string
 ): Promise<SupabaseSession> {
+  let supabase: SupabaseClient;
+  let resolvedEmail: string;
+
+  if (typeof urlOrClient === "string") {
+    if (!urlOrClient || typeof keyOrEmail !== "string" || !keyOrEmail || typeof email !== "string" || !email) {
+      throw new AuthBridgeError("failed-precondition", "supabaseUrl, serviceRoleKey, and email must be non-empty strings.");
+    }
+    supabase = createClient(urlOrClient, keyOrEmail, {
+      auth: { autoRefreshToken: false, persistSession: false },
+    });
+    resolvedEmail = email;
+  } else {
+    if (urlOrClient == null) {
+      throw new AuthBridgeError("failed-precondition", "client must be provided.");
+    }
+    supabase = urlOrClient;
+    resolvedEmail = keyOrEmail;
+  }
+
+  if (typeof resolvedEmail !== "string" || !resolvedEmail) {
+    throw new AuthBridgeError("failed-precondition", "email must be a non-empty string.");
+  }
+
   const { data: linkData, error: linkError } = await supabase.auth.admin.generateLink({
     type: "magiclink",
-    email: email.toLowerCase(),
+    email: resolvedEmail.toLowerCase(),
   });
 
   if (linkError || !linkData?.properties?.hashed_token) {
