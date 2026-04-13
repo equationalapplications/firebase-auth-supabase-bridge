@@ -31,6 +31,11 @@ export async function getSupabaseUserSession(
     supabase = urlOrClient;
     resolvedEmail = keyOrEmail;
   }
+
+  if (typeof resolvedEmail !== "string" || !resolvedEmail) {
+    throw new AuthBridgeError("failed-precondition", "email must be a non-empty string.");
+  }
+
   const { data: linkData, error: linkError } = await supabase.auth.admin.generateLink({
     type: "magiclink",
     email: resolvedEmail.toLowerCase(),
