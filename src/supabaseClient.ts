@@ -5,8 +5,8 @@ import { AuthBridgeError } from "./errors.js";
 const clients = new Map<string, SupabaseClient>();
 
 export function getSupabaseAdminClient(supabaseUrl: string, serviceRoleKey: string): SupabaseClient {
-  if (!supabaseUrl || !serviceRoleKey) {
-    throw new AuthBridgeError("failed-precondition", "Missing supabaseUrl or serviceRoleKey.");
+  if (typeof supabaseUrl !== "string" || !supabaseUrl || typeof serviceRoleKey !== "string" || !serviceRoleKey) {
+    throw new AuthBridgeError("failed-precondition", "supabaseUrl and serviceRoleKey must be non-empty strings.");
   }
 
   const keyHash = createHash("sha256").update(serviceRoleKey).digest("hex");

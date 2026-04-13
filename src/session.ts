@@ -20,10 +20,13 @@ export async function getSupabaseUserSession(
   let resolvedEmail: string;
 
   if (typeof urlOrClient === "string") {
+    if (!urlOrClient || typeof keyOrEmail !== "string" || !keyOrEmail || typeof email !== "string" || !email) {
+      throw new AuthBridgeError("failed-precondition", "supabaseUrl, serviceRoleKey, and email must be non-empty strings.");
+    }
     supabase = createClient(urlOrClient, keyOrEmail, {
       auth: { autoRefreshToken: false, persistSession: false },
     });
-    resolvedEmail = email!;
+    resolvedEmail = email;
   } else {
     supabase = urlOrClient;
     resolvedEmail = keyOrEmail;
