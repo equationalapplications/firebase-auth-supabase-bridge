@@ -227,3 +227,57 @@ test("returns session even when onUserReady throws", async () => {
   assert.equal(result.access_token, "access-token-123");
   assert.equal(result.refresh_token, "refresh-token-123");
 });
+
+test("soft-delete recreate: throws when deleteUser fails with non-404 error", async () => {
+  const staleId = "00000000-0000-0000-0000-000000000009";
+  globalThis.fetch = sequentialFetch(
+    jsonResponse(null),                                                                               // get_user_id_by_email → not found
+    jsonResponse({ msg: "User already registered" }, 422),                                           // createUser → 422
+    jsonResponse({ user_id: staleId, deleted_at: "2024-01-01T00:00:00Z" }),                         // get_auth_user_by_email → stale deleted
+    jsonResponse({ msg: "Service unavailable" }, 500),                                               // deleteUser → 500
+  );
+
+  await assert.rejects(
+    () =>
+      exchangeFirebaseTokenForSupabaseSession({
+        supabaseUrl: "https://test9.supabase.co",
+        supabaseServiceRoleKey: SERVICE_ROLE_KEY,
+        firebaseUid: "firebase-uid-123",
+        email: "user@example.com",
+      }),
+    (err: unknown) => {
+      assert(err instanceof AuthBridgeError, "expected AuthBridgeError");
+      assert.equal(err.code, "internal");
+      assert.match(err.message, /Failed to delete soft-deleted Supabase user/);
+      return true;
+    },
+  );
+});
+
+test("soft-delete recreate: throws when recreate createUser fails", async () => {
+  const staleId = "00000000-0000-0000-0000-000000000010";
+  const staleUser = { ...testUser, id: staleId };
+  globalThis.fetch = sequentialFetch(
+    jsonResponse(null),                                                                               // get_user_id_by_email → not found
+    jsonResponse({ msg: "User already registered" }, 422),                                           // createUser → 422
+    jsonResponse({ user_id: staleId, deleted_at: "2024-01-01T00:00:00Z" }),                         // get_auth_user_by_email → stale deleted
+    jsonResponse(staleUser),                                                                          // deleteUser → 200
+    jsonResponse({ msg: "Internal server error" }, 500),                                             // createUser again → 500
+  );
+
+  await assert.rejects(
+    () =>
+      exchangeFirebaseTokenForSupabaseSession({
+        supabaseUrl: "https://test10.supabase.co",
+        supabaseServiceRoleKey: SERVICE_ROLE_KEY,
+        firebaseUid: "firebase-uid-123",
+        email: "user@example.com",
+      }),
+    (err: unknown) => {
+      assert(err instanceof AuthBridgeError, "expected AuthBridgeError");
+      assert.equal(err.code, "internal");
+      assert.match(err.message, /Failed to recreate Supabase user/);
+      return true;
+    },
+  );
+});
