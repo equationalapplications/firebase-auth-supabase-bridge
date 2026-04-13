@@ -1,4 +1,4 @@
-import { createClient } from "@supabase/supabase-js";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { AuthBridgeError } from "./errors.js";
 
 export interface SupabaseSession {
@@ -8,17 +8,29 @@ export interface SupabaseSession {
   token_type: string;
 }
 
+export async function getSupabaseUserSession(supabaseUrl: string, serviceRoleKey: string, email: string): Promise<SupabaseSession>;
+/** @deprecated Pass supabaseUrl and serviceRoleKey instead of a SupabaseClient instance. */
+export async function getSupabaseUserSession(client: SupabaseClient, email: string): Promise<SupabaseSession>;
 export async function getSupabaseUserSession(
-  supabaseUrl: string,
-  serviceRoleKey: string,
-  email: string
+  urlOrClient: string | SupabaseClient,
+  keyOrEmail: string,
+  email?: string
 ): Promise<SupabaseSession> {
-  const supabase = createClient(supabaseUrl, serviceRoleKey, {
-    auth: { autoRefreshToken: false, persistSession: false },
-  });
+  let supabase: SupabaseClient;
+  let resolvedEmail: string;
+
+  if (typeof urlOrClient === "string") {
+    supabase = createClient(urlOrClient, keyOrEmail, {
+      auth: { autoRefreshToken: false, persistSession: false },
+    });
+    resolvedEmail = email!;
+  } else {
+    supabase = urlOrClient;
+    resolvedEmail = keyOrEmail;
+  }
   const { data: linkData, error: linkError } = await supabase.auth.admin.generateLink({
     type: "magiclink",
-    email: email.toLowerCase(),
+    email: resolvedEmail.toLowerCase(),
   });
 
   if (linkError || !linkData?.properties?.hashed_token) {
