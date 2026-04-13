@@ -1,3 +1,16 @@
+## [2.0.2](https://github.com/equationalapplications/firebase-auth-supabase-bridge/compare/v2.0.1...v2.0.2) (2026-04-13)
+
+
+### Bug Fixes
+
+* address bridge review issues 1-6 ([6c26ecf](https://github.com/equationalapplications/firebase-auth-supabase-bridge/commit/6c26ecfab68c398ff1d181be4f2bd39989bbb711))
+* address reviewer feedback on validation order, silent null, log safety, and README cast ([81bd588](https://github.com/equationalapplications/firebase-auth-supabase-bridge/commit/81bd5885c9cab43862511b7c2829fbaaa9177b1b))
+* restore backward compat for getSupabaseUserSession — add overload accepting SupabaseClient ([e42c7b9](https://github.com/equationalapplications/firebase-auth-supabase-bridge/commit/e42c7b94c358b47ea296c2d6f5049d86f7adf8dd))
+* strengthen typeof validation in supabaseClient and session overload ([b383681](https://github.com/equationalapplications/firebase-auth-supabase-bridge/commit/b383681cec8a62b6bcd5db710bb86ad9635160fd))
+* throw AuthBridgeError when 422 user not found by email lookup ([a17e647](https://github.com/equationalapplications/firebase-auth-supabase-bridge/commit/a17e647388cca2fe306da840656f4b3140688055))
+* use SHA-256 hash of service role key in client cache key ([41f367c](https://github.com/equationalapplications/firebase-auth-supabase-bridge/commit/41f367c66b849fa375afabd37ac9df7f8b8be444))
+* validate resolvedEmail after overload dispatch in getSupabaseUserSession ([8d437de](https://github.com/equationalapplications/firebase-auth-supabase-bridge/commit/8d437dee8f9273b6b9ab9eee620b1c3415ecf728))
+
 ## [2.0.1](https://github.com/equationalapplications/firebase-auth-supabase-bridge/compare/v2.0.0...v2.0.1) (2026-04-12)
 
 
