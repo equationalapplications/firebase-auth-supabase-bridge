@@ -204,3 +204,26 @@ test("does not call onUserReady when user already exists", async () => {
 
   assert.equal(onUserReadyCalled, false);
 });
+
+test("returns session even when onUserReady throws", async () => {
+  const newUser = { ...testUser, id: "new-user-id" };
+  globalThis.fetch = sequentialFetch(
+    jsonResponse(null),                               // get_user_id_by_email → not found
+    jsonResponse(newUser, 201),                       // createUser → success
+    jsonResponse(linkBody),                           // generate_link
+    jsonResponse({ ...sessionBody, user: newUser }),  // verifyOtp
+  );
+
+  const result = await exchangeFirebaseTokenForSupabaseSession({
+    supabaseUrl: "https://test8.supabase.co",
+    supabaseServiceRoleKey: SERVICE_ROLE_KEY,
+    firebaseUid: "firebase-uid-123",
+    email: "user@example.com",
+    onUserReady: async () => {
+      throw new Error("onUserReady failed");
+    },
+  });
+
+  assert.equal(result.access_token, "access-token-123");
+  assert.equal(result.refresh_token, "refresh-token-123");
+});

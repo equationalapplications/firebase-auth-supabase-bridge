@@ -46,7 +46,10 @@ export async function exchangeFirebaseTokenForSupabaseSession(
         try {
           await onUserReady(supabaseUserId);
         } catch (err) {
-          console.error("onUserReady threw an error (session will still be returned):", err);
+          console.error(
+            "onUserReady threw an error (session will still be returned):",
+            err instanceof Error ? err.message : String(err)
+          );
         }
       }
     }
