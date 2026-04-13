@@ -62,7 +62,9 @@ export async function createSupabaseUser(
       if (recreateError) {
         throw new AuthBridgeError("internal", `Failed to recreate Supabase user: ${recreateError.message}`);
       }
-      if (!recreated?.user) return null;
+      if (!recreated?.user) {
+        throw new AuthBridgeError("internal", "Failed to recreate Supabase user: response did not include a user");
+      }
       return { id: recreated.user.id };
     }
     throw new AuthBridgeError("internal", `Failed to create Supabase user: ${error.message}`);
