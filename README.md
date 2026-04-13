@@ -67,7 +67,7 @@ export const exchangeToken = onCall(
       });
     } catch (err) {
       if (err instanceof AuthBridgeError) {
-        throw new HttpsError(err.code as Parameters<typeof HttpsError>[0], err.message);
+        throw new HttpsError(err.code as ConstructorParameters<typeof HttpsError>[0], err.message);
       }
       throw err;
     }
