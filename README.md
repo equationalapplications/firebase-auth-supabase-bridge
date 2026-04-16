@@ -249,4 +249,3 @@ MIT
 ---
 
 Made with ❤️ by [Equational Applications LLC](https://equationalapplications.com)
-
