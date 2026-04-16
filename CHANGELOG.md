@@ -1,3 +1,10 @@
+## [2.0.3](https://github.com/equationalapplications/firebase-auth-supabase-bridge/compare/v2.0.2...v2.0.3) (2026-04-16)
+
+
+### Bug Fixes
+
+* restore trailing newline in README ([8e8d88c](https://github.com/equationalapplications/firebase-auth-supabase-bridge/commit/8e8d88c7b2ede8a07dbfec82a5b0f421b684d181))
+
 ## [2.0.2](https://github.com/equationalapplications/firebase-auth-supabase-bridge/compare/v2.0.1...v2.0.2) (2026-04-13)
 
 
