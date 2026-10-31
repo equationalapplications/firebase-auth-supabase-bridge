@@ -24,6 +24,8 @@ jobs:
     if: github.ref == 'refs/heads/main'
     permissions:
       contents: write
+      issues: write
+      pull-requests: write
       id-token: write
     steps:
       - uses: actions/checkout@v4
@@ -32,8 +34,11 @@ jobs:
         with:
           node-version: 22
           registry-url: https://registry.npmjs.org
+      # Trusted publishing (OIDC) requires the npm CLI >= 11.5.1; Node 22 ships npm 10.x.
+      - run: npm install -g npm@latest
       - run: npm ci
+      # Publishing via npm OIDC trusted publishing (no NPM_TOKEN). Provenance is
+      # attached automatically by @semantic-release/npm when id-token: write is set.
       - run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
